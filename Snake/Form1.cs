@@ -18,6 +18,7 @@ namespace Snake
         {
             InitializeComponent();
             gameSnake = new GameSnake(20, 15);
+            gameSnake.GameChanged += DrawGame;
             DrawGame();
         }
 
@@ -26,8 +27,10 @@ namespace Snake
             pictureBox.Image = new Bitmap(pictureBox.Width, pictureBox.Height);
             Graphics g = Graphics.FromImage(pictureBox.Image);
             //g.Clear(Color.Gray);
+            float tileWidth = pictureBox.Width / gameSnake.Width;
+            float tileHeight = pictureBox.Height / gameSnake.Height;
 
-            for(int x = 0; x < gameSnake.Width; x++)
+            for (int x = 0; x < gameSnake.Width; x++)
             {
                 for(int y = 0; y < gameSnake.Height; y++)
                 {
@@ -35,16 +38,20 @@ namespace Snake
                     if ((x + y) % 2 == 0) penColor = Color.Gray;
 
                     g.FillRectangle(new SolidBrush(penColor), 
-                        new Rectangle(pictureBox.Width/gameSnake.Width * x,
-                                      pictureBox.Height / gameSnake.Height * y, 
-                                      pictureBox.Width / gameSnake.Width, 
-                                      pictureBox.Height / gameSnake.Height));
+                        new Rectangle((int)(tileWidth * x),
+                                      (int)(tileHeight * y),
+                                      (int)(tileWidth),
+                                      (int)(tileHeight)));
                 }
             }
 
             foreach(Point p in gameSnake.Snake)
             {
-
+                g.FillEllipse(new SolidBrush(Color.Green), 
+                    new Rectangle((int)(tileWidth * p.X),
+                                  (int)(tileHeight * p.Y),
+                                  (int)(tileWidth),
+                                  (int)(tileHeight)));
             }
         }
     }

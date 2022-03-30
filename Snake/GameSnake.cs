@@ -15,6 +15,11 @@ namespace Snake
         private List<Point> snake;
         private DirectionsEnum direction;
         private Timer gameTimer;
+        private Point food;
+
+        public delegate void myAction();
+        public myAction GameChanged;
+
         public GameSnake(int width, int height)
         {
             this.width = width;
@@ -35,12 +40,39 @@ namespace Snake
 
         private void GameTimer_Tick(object sender, EventArgs e)
         {
+            Point newHead = Point.Empty;
+            switch(direction)
+            {
+                case DirectionsEnum.Up:
+                    newHead = new Point(snake.First().X, snake.First().Y - 1); 
+                    break;
 
+                case DirectionsEnum.Down:
+                    newHead = new Point(snake.First().X, snake.First().Y + 1); 
+                    break;
+
+                case DirectionsEnum.Left:
+                    newHead = new Point(snake.First().X - 1, snake.First().Y); 
+                    break;
+
+                case DirectionsEnum.Right:
+                    newHead = new Point(snake.First().X + 1, snake.First().Y); 
+                    break;
+            }
+
+            snake.Insert(0, newHead);
+            snake.Remove(snake.Last());
+
+            if(GameChanged != null)
+            {
+                GameChanged();
+            }
         }
 
         public int Width { get => width;}
         public int Height { get => height;}
         public List<Point> Snake { get => snake;}
         internal DirectionsEnum Direction { get => direction;}
+        public Timer GameTimer { get => gameTimer;}
     }
 }
