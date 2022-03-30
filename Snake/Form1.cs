@@ -17,16 +17,20 @@ namespace Snake
         public Form1()
         {
             InitializeComponent();
-            gameSnake = new GameSnake(20, 15);
+            gameSnake = new GameSnake(20, 15, 300);
             gameSnake.GameChanged += DrawGame;
             DrawGame();
         }
 
         private void DrawGame()
         {
+            Color snakeColor = Color.Green;
+            if (gameSnake.isGameOver) snakeColor = Color.Black;
+
+
             pictureBox.Image = new Bitmap(pictureBox.Width, pictureBox.Height);
             Graphics g = Graphics.FromImage(pictureBox.Image);
-            //g.Clear(Color.Gray);
+
             float tileWidth = pictureBox.Width / gameSnake.Width;
             float tileHeight = pictureBox.Height / gameSnake.Height;
 
@@ -47,11 +51,30 @@ namespace Snake
 
             foreach(Point p in gameSnake.Snake)
             {
-                g.FillEllipse(new SolidBrush(Color.Green), 
+                g.FillEllipse(new SolidBrush(snakeColor), 
                     new Rectangle((int)(tileWidth * p.X),
                                   (int)(tileHeight * p.Y),
                                   (int)(tileWidth),
                                   (int)(tileHeight)));
+            }
+
+            g.FillEllipse(new SolidBrush(Color.Red),
+                    new Rectangle((int)(tileWidth * gameSnake.Food.X),
+                                  (int)(tileHeight * gameSnake.Food.Y),
+                                  (int)(tileWidth),
+                                  (int)(tileHeight)));
+
+            if (gameSnake.isGameOver)
+            {
+                if (MessageBox.Show("Do you want to restart game?", 
+                    "Game over", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    gameSnake.Restart(gameSnake.Width, gameSnake.Height, gameSnake.GameTimer.Interval);
+                }
+                else
+                {
+                    this.Close();
+                }
             }
         }
 
