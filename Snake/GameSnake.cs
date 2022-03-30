@@ -150,6 +150,7 @@ namespace Snake
             if(newHead != Food) snake.Remove(snake.Last());
             else
             {
+                gameTimer.Interval = (int)(gameTimer.Interval * 0.9);
                 while (snake.Contains(food))
                 {
                     food.X = rand.Next(0, width);
