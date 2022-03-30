@@ -54,5 +54,10 @@ namespace Snake
                                   (int)(tileHeight)));
             }
         }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            gameSnake.OnKeyDown(e.KeyCode);
+        }
     }
 }
