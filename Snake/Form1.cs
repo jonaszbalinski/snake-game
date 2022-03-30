@@ -28,12 +28,13 @@ namespace Snake
         {
             pictureBox.Image = new Bitmap(pictureBox.Width, pictureBox.Height);
             g = Graphics.FromImage(pictureBox.Image);
+            g.Clear(Color.Gray);
 
             Color snakeColor = Color.Green;
             if (gameSnake.isGameOver) snakeColor = Color.Black;
 
-            float tileWidth = pictureBox.Width / gameSnake.Width;
-            float tileHeight = pictureBox.Height / gameSnake.Height;
+            float tileWidth = (float)pictureBox.Width / gameSnake.Width;
+            float tileHeight = (float)pictureBox.Height / gameSnake.Height;
 
             for (int x = 0; x < gameSnake.Width; x++)
             {
@@ -67,7 +68,7 @@ namespace Snake
 
             labelScore.Text = "Your score: " + gameSnake.Points.ToString();
             float mod = (float)gameSnake.DefaultSpeed / gameSnake.GameTimer.Interval;
-            labelSpeed.Text = "Snake current speed \nmodifier: x" + mod.ToString("n2");
+            labelSpeed.Text = "Current speed modifier: x" + mod.ToString("n2");
 
             if (gameSnake.isGameOver)
             {
