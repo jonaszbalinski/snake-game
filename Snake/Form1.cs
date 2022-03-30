@@ -10,26 +10,27 @@ using System.Windows.Forms;
 
 namespace Snake
 {
-    public partial class Form1 : Form
+    public partial class Form : System.Windows.Forms.Form
     {
 
         GameSnake gameSnake;
-        public Form1()
+        Graphics g;
+        public Form()
         {
             InitializeComponent();
-            gameSnake = new GameSnake(20, 15, 300);
+            gameSnake = new GameSnake(50, 30, 150);
             gameSnake.GameChanged += DrawGame;
+
             DrawGame();
         }
 
         private void DrawGame()
         {
+            pictureBox.Image = new Bitmap(pictureBox.Width, pictureBox.Height);
+            g = Graphics.FromImage(pictureBox.Image);
+
             Color snakeColor = Color.Green;
             if (gameSnake.isGameOver) snakeColor = Color.Black;
-
-
-            pictureBox.Image = new Bitmap(pictureBox.Width, pictureBox.Height);
-            Graphics g = Graphics.FromImage(pictureBox.Image);
 
             float tileWidth = pictureBox.Width / gameSnake.Width;
             float tileHeight = pictureBox.Height / gameSnake.Height;
@@ -64,6 +65,10 @@ namespace Snake
                                   (int)(tileWidth),
                                   (int)(tileHeight)));
 
+            labelScore.Text = "Your score: " + gameSnake.Points.ToString();
+            float mod = (float)gameSnake.DefaultSpeed / gameSnake.GameTimer.Interval;
+            labelSpeed.Text = "Snake current speed \nmodifier: x" + mod.ToString("n2");
+
             if (gameSnake.isGameOver)
             {
                 if (MessageBox.Show("Do you want to restart game?", 
@@ -78,7 +83,7 @@ namespace Snake
             }
         }
 
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        private void Form_KeyDown(object sender, KeyEventArgs e)
         {
             gameSnake.OnKeyDown(e.KeyCode);
         }

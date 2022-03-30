@@ -12,6 +12,8 @@ namespace Snake
         public enum DirectionsEnum {Up, Down, Left, Right, None};
         private int width;
         private int height;
+        private int points;
+        private int defaultSpeed;
         private List<Point> snake;
         private DirectionsEnum direction;
         private DirectionsEnum previousMoveDirection;
@@ -26,9 +28,11 @@ namespace Snake
         public GameSnake(int width, int height, int tickrate)
         {
             isGameOver = false;
+            points = 0;
 
             this.width = width;
             this.height = height;
+            defaultSpeed = tickrate;
 
             snake = new List<Point>();
             snake.Add(new Point(this.width/2, this.height-3));
@@ -54,9 +58,11 @@ namespace Snake
         public void Restart(int width, int height, int tickrate)
         {
             isGameOver = false;
+            points = 0;
 
             this.width = width;
             this.height = height;
+            defaultSpeed = tickrate;
 
             snake.Clear();
             snake.Add(new Point(this.width / 2, this.height - 3));
@@ -150,7 +156,8 @@ namespace Snake
             if(newHead != Food) snake.Remove(snake.Last());
             else
             {
-                gameTimer.Interval = (int)(gameTimer.Interval * 0.9);
+                points += (int)(100*((float)defaultSpeed/gameTimer.Interval));
+                gameTimer.Interval = (int)(gameTimer.Interval * 0.95);
                 while (snake.Contains(food))
                 {
                     food.X = rand.Next(0, width);
@@ -170,5 +177,7 @@ namespace Snake
         internal DirectionsEnum Direction { get => direction;}
         public Timer GameTimer { get => gameTimer;}
         public Point Food { get => food; }
+        public int DefaultSpeed { get => defaultSpeed; }
+        public int Points { get => points; }
     }
 }
